@@ -1,0 +1,99 @@
+plugins {
+    id 'java'
+    id 'scala'
+    id 'idea'
+}
+
+group 'steve.akka.project'
+version '1.0-SNAPSHOT'
+
+def AKKA_VERSION = '2.6.16'
+def AKKA_HTTP_VERSION = '10.2.6'
+def SCALA_VERSION = '2.13'
+def JUNIT_VERSION = '5.7.2'
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'scala'
+    apply plugin: 'idea'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            name "maven-repo"
+            url "https://repo.maven.apache.org/maven2"
+        }
+        maven {
+            name "lightbend-maven-release"
+            url "https://repo.lightbend.com/lightbend/maven-releases"
+        }
+        ivy {
+            name "lightbend-ivy-release"
+            url "https://repo.lightbend.com/lightbend/ivy-releases"
+            layout "ivy"
+        }
+    }
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    test {
+        useJUnitPlatform()
+    }
+    dependencies {
+        implementation 'org.scala-lang:scala-library:2.13.6'
+    }
+}
+
+configure(project(':demo:actor-demo')) {
+    dependencies {
+        implementation "com.typesafe.akka:akka-actor_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-actor_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-stream_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-slf4j_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-http_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+        implementation "com.typesafe.akka:akka-http-core_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+
+        testImplementation "org.junit.jupiter:junit-jupiter:$JUNIT_VERSION"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$JUNIT_VERSION"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$JUNIT_VERSION"
+
+        testImplementation "com.typesafe.akka:akka-testkit_$SCALA_VERSION:$AKKA_VERSION"
+        testCompile "com.typesafe.akka:akka-stream-testkit_$SCALA_VERSION:$AKKA_VERSION"
+        testImplementation "com.typesafe.akka:akka-http-testkit_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+    }
+}
+
+configure(subprojects.findAll { it -> it.name.endsWith('service') || it.name.endsWith('interface') }) {
+    dependencies {
+        implementation "com.typesafe.akka:akka-actor_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-actor_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-stream_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-slf4j_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-http_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+        implementation "com.typesafe.akka:akka-http-core_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+
+        testImplementation "org.junit.jupiter:junit-jupiter:$JUNIT_VERSION"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$JUNIT_VERSION"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$JUNIT_VERSION"
+
+        testImplementation "com.typesafe.akka:akka-testkit_$SCALA_VERSION:$AKKA_VERSION"
+        testCompile "com.typesafe.akka:akka-stream-testkit_$SCALA_VERSION:$AKKA_VERSION"
+        testImplementation "com.typesafe.akka:akka-http-testkit_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+    }
+}
+
+configure { project(':demo:message-reveiver-service') } {
+    dependencies {
+        implementation project(":demo:message-sender-interface")
+        implementation project(":demo:message-receiver-interface")
+    }
+}
+
+configure { project(':demo:message-sender-service') } {
+    dependencies {
+        implementation project(":demo:message-sender-interface")
+        implementation project(":demo:message-receiver-interface")
+    }
+}

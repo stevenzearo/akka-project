@@ -1,0 +1,5 @@
+include 'demo:actor-demo'
+include 'demo:message-sender-interface',
+        'demo:message-sender-service',
+        'demo:message-receiver-service',
+        'demo:message-receiver-interface'
