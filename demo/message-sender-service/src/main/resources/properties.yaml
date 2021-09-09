@@ -1,0 +1,26 @@
+akka {
+  actor {
+    allow-java-serialization = true
+    provider = remote
+    remote {
+      enable-transports = [ "akka.remote.netty.tcp" ]
+      netty.tcp {
+        hostname = "127.0.0.1"
+        port = 8400
+      }
+    }
+  }
+  remote {
+    artery {
+      enabled = on
+      transport = tcp
+      canonical {
+        port = 25521
+      }
+    }
+    actor {
+      sender="akka://127.0.0.1/user/receiver"
+    }
+  }
+
+}
