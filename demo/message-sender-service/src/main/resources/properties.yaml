@@ -1,13 +1,22 @@
 akka {
   actor {
-    allow-java-serialization = true
+    serialize-messages = on
+    serialize-creators = on
+    allow-java-serialization = off
     provider = remote
-    remote {
-      enable-transports = [ "akka.remote.netty.tcp" ]
-      netty.tcp {
-        hostname = "127.0.0.1"
-        port = 8400
-      }
+    serializers {
+      java = "akka.serialization.JavaSerializer"
+      proto = "akka.remote.serialization.ProtobufSerializer"
+      mySerializer = "app.receiver.api.MessageSerializer"
+    }
+    serialization-bindings {
+      "java.lang.String" = mySerializer
+      "com.google.protobuf.Message" = proto
+      "java.io.Serializable" = java
+      "akka.serialization.JavaSerializer" = mySerializer
+      "app.receiver.api.OpenMessage" = mySerializer
+      "app.receiver.api.CloseMessage" = mySerializer
+      "app.receiver.api.ConnectionMessage" = mySerializer
     }
   }
   remote {
@@ -21,6 +30,10 @@ akka {
     actor {
       sender="akka://127.0.0.1/user/receiver"
     }
+    enable-transports = [ "akka.remote.netty.tcp" ]
+    netty.tcp {
+      hostname = "127.0.0.1"
+      port = 8400
+    }
   }
-
 }

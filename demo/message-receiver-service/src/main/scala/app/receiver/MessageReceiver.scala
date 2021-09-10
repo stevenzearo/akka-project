@@ -8,16 +8,19 @@ class MessageReceiver extends Actor {
 
     override def receive: Receive = {
         case msg: OpenMessage =>
-            println(s"get open message from ${msg.from.path}")
-            connectionContext.connect(msg.from)
+            println(s"get open message from ${msg.fromPath}")
+            connectionContext.connect(context.system.actorSelection(msg.fromPath))
         case msg: ConnectionMessage =>
-            println(s"receive message from ${msg.from.path}")
-            val maybeRef = connectionContext.connectionMap.get(msg.to.path.name)
-            if (maybeRef.isDefined) maybeRef.get ! ConnectionMessage(from = msg.from, to = msg.to, content = msg.content)
-
+            println(s"receive message from ${msg.fromPath}")
+            if (connectionContext.connectionMap.isDefinedAt(msg.fromPath)) {
+                println(s"receive message from ${msg.fromPath} and send to ${msg.toPath}")
+                connectionContext.send(msg.fromPath, msg.toPath, msg.content)
+            } else {
+                println("actorRef not found!")
+            }
         case msg: CloseMessage =>
-            println(s"get close message from ${msg.from.path}")
-            connectionContext.close(msg.from)
-        case _ =>
+            println(s"get close message from ${msg.fromPath}")
+            connectionContext.close(msg.fromPath)
+        case _ => println("unknown message!")
     }
 }

@@ -1,24 +1,25 @@
 package app.receiver
 
-import akka.actor.ActorRef
+import akka.actor.ActorSelection
+import app.receiver.api.ConnectionMessage
 
 import scala.collection.mutable
 
 class ConnectionContext {
-    val connectionMap: mutable.HashMap[String, ActorRef] = mutable.HashMap.empty
+    val connectionMap: mutable.HashMap[String, ActorSelection] = mutable.HashMap.empty
 
-    def connect(actorRef: ActorRef): Unit = {
-        connectionMap.put(actorRef.path.name, actorRef)
-        println(s"${actorRef.path.name} connect to server" )
+    def connect(actorSelection: ActorSelection): Unit = {
+        connectionMap.put(actorSelection.toSerializationFormat, actorSelection)
+        println(s"${actorSelection.pathString} connect to server")
     }
 
-    def send(actorRef: ActorRef, msg: Any): Unit = {
-        val maybeRef = connectionMap.get(actorRef.path.name)
-        if (maybeRef.isDefined) maybeRef.get ! msg
+    def send(fromPath: String, toPath: String, content: Any): Unit = {
+        val maybeRef = connectionMap.get(toPath)
+        if (maybeRef.isDefined) maybeRef.get ! new ConnectionMessage(fromPath, toPath, content)
     }
 
-    def close(actorRef: ActorRef): Unit = {
-        connectionMap.remove(actorRef.path.name)
-        println(s"${actorRef.path.name} disconnect to server" )
+    def close(path: String): Unit = {
+        connectionMap.remove(path)
+        println(s"$path disconnect to server")
     }
 }
