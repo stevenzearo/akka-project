@@ -3,6 +3,8 @@ package app.receiver
 import akka.actor.Actor
 import app.receiver.api.{CloseMessage, ConnectionMessage, OpenMessage}
 
+import scala.sys.exit
+
 class MessageReceiver extends Actor {
     val connectionContext: ConnectionContext = new ConnectionContext()
 
@@ -21,6 +23,7 @@ class MessageReceiver extends Actor {
         case msg: CloseMessage =>
             println(s"get close message from ${msg.fromPath}")
             connectionContext.close(msg.fromPath)
+            if (connectionContext.connectionMap.isEmpty) exit()
         case _ => println("unknown message!")
     }
 }

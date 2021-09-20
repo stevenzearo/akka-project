@@ -24,16 +24,9 @@ akka {
       enabled = on
       transport = tcp
       canonical {
-        port = 25521
+        port = 25521 # akka system connection port
+        hostname = "127.0.0.1"
       }
-    }
-    actor {
-      sender="akka://127.0.0.1/user/receiver"
-    }
-    enable-transports = [ "akka.remote.netty.tcp" ]
-    netty.tcp {
-      hostname = "127.0.0.1"
-      port = 8400
     }
   }
 }
