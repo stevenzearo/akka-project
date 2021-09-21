@@ -1,12 +1,12 @@
 package app.sender
 
-import akka.actor.{Actor, ActorSelection}
+import akka.actor.{Actor, ActorRef}
 import akka.serialization.Serialization
 import app.receiver.api.{CloseMessage, ConnectionMessage}
 
 import scala.sys.exit
 
-class MessageSender(server: ActorSelection) extends Actor {
+class MessageSender(server: ActorRef) extends Actor {
     override def receive: Receive = {
         case msg: ConnectionMessage =>
             println(s"get message from ${msg.fromPath}: ${msg.content}")
