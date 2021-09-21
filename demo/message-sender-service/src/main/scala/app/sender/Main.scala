@@ -9,7 +9,7 @@ import java.io.File
 
 
 object Main extends App {
-    private val file: File = new File("./demo/message-sender-service/src/main/resources/properties.yaml")
+    private val file: File = new File("./demo/message-sender-service/src/main/resources/application.conf")
     private val value: Config = ConfigFactory.parseFile(file)
     private val system: ActorSystem = ActorSystem("message-sender", value)
     implicit private val server: ActorSelection = system.actorSelection("akka://message-receiver@127.0.0.1:25520/user/receiver")
