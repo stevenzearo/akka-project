@@ -1,6 +1,7 @@
 package app.receiver
 
 import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.event.LoggingAdapter
 import akka.routing.FromConfig
 import com.typesafe.config.{Config, ConfigFactory}
 
@@ -14,5 +15,6 @@ object Main extends App {
     private val receiverProps = Props(classOf[MessageReceiver], connectionRef)
     private val routerProps: Props = FromConfig.props(receiverProps)
     private val receiverRef: ActorRef = system.actorOf(routerProps, "receiver")
-    println(receiverRef.path)
+    private val log: LoggingAdapter = system.log
+    log.info(receiverRef.path.toSerializationFormat)
 }

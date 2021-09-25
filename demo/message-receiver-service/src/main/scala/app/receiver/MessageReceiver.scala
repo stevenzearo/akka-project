@@ -1,18 +1,18 @@
 package app.receiver
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorLogging, ActorRef}
 import app.receiver.api.{CloseMessage, ConnectionMessage, OpenMessage}
 
-class MessageReceiver(val connectionRef: ActorRef) extends Actor {
+class MessageReceiver(val connectionRef: ActorRef) extends Actor with ActorLogging {
     override def receive: Receive = {
         case msg: OpenMessage => send(self.path.toSerializationFormat, msg.fromPath, msg)
         case msg: ConnectionMessage => send(self.path.toSerializationFormat, msg.fromPath, msg)
         case msg: CloseMessage => send(self.path.toSerializationFormat, msg.fromPath, msg)
-        case _ => println("unknown message!")
+        case _ => log.warning("unknown message!")
     }
 
     private def send(selfPath: String, fromPath: String, msg: Any): Unit = {
-        println(s"$selfPath get message from $fromPath")
+        log.info(s"$selfPath get message from $fromPath")
         connectionRef ! msg
     }
 }

@@ -1,16 +1,16 @@
 package app.sender
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.serialization.Serialization
 import app.receiver.api.{CloseMessage, ConnectionMessage}
 
 import scala.sys.exit
 
-class MessageSender(server: ActorRef) extends Actor {
+class MessageSender(server: ActorRef) extends Actor with ActorLogging {
     override def receive: Receive = {
         case msg: ConnectionMessage =>
-            println(s"get message from ${msg.fromPath}: ${msg.content}")
-            print(s"Reply to ${msg.fromPath}:")
+            log.info(s"get message from ${msg.fromPath}: ${msg.content}")
+            log.info(s"Reply to ${msg.fromPath}:")
             val content = Console.in.readLine()
             if ("exit".equalsIgnoreCase(content)) {
                 server ! new CloseMessage(Serialization.serializedActorPath(this.self))
@@ -18,6 +18,6 @@ class MessageSender(server: ActorRef) extends Actor {
             } else {
                 server ! new ConnectionMessage(Serialization.serializedActorPath(this.self), msg.toPath, content)
             }
-        case _ => println("unknown message!")
+        case _ => log.error("unknown message!")
     }
 }
