@@ -1,12 +1,13 @@
 package app.receiver
 
-import akka.actor.{Actor, ActorLogging, ActorSelection}
+import akka.actor.{Actor, ActorLogging, ActorSelection, Props, Stash}
+import app.receiver.ConnectionContext.{AvailableMessage, RecoveringMessage}
 import app.receiver.api.{CloseMessage, ConnectionMessage, OpenMessage}
 
 import scala.collection.mutable
 import scala.sys.exit
 
-class ConnectionContext extends Actor with ActorLogging {
+class ConnectionContext extends Actor with ActorLogging with Stash {
     val connectionMap: mutable.HashMap[String, ActorSelection] = mutable.HashMap.empty // todo these data should store in db
 
     override def receive: Receive = {
@@ -38,8 +39,28 @@ class ConnectionContext extends Actor with ActorLogging {
         if (maybeRef.isDefined) maybeRef.get ! new ConnectionMessage(fromPath, toPath, content)
     }
 
+    def handle: Receive = {
+        case AvailableMessage =>
+            unstashAll()
+            context.become(handle)
+        case RecoveringMessage => context.become(recovering)
+
+    }
+
+    def recovering: Receive = {
+        case _ => stash()
+    }
+
     def close(path: String): Unit = {
         connectionMap.remove(path)
         log.info(s"$path disconnect to server")
     }
+}
+
+object ConnectionContext {
+    final case object AvailableMessage
+    final case object RecoveringMessage
+    final case class Message()
+
+    def connectionContextProps: Props = Props[ConnectionContext]()
 }
