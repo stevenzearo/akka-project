@@ -3,20 +3,25 @@ package monad
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, Future, Promise}
-import scala.util.{Failure, Random, Success}
+import scala.util.Random
 
 trait AdventureAsync {
-    def collectionCoins(): Future[List[Coin]]
+    def collectionCoinsWithFallBack(): Future[List[Coin]]
 
     def buyTreasure(coins: List[Coin]): Future[Treasure]
 }
 
 class AdventureAsyncImpl extends AdventureAsync {
-    override def collectionCoins(): Future[List[Coin]] = {
+
+    override def collectionCoinsWithFallBack(): Future[List[Coin]] = collectionCoins().recoverWith(e => collectionCoinsWithFallBack())
+
+    private def collectionCoins(): Future[List[Coin]] = {
         Future {
             // do some network needed things or serialization things
             if (eatenByMonster()) throw GameOverException("Oops!")
-            List(Silver(), Silver(), Gold())
+            var coins: List[Coin] = Nil
+            1 to 2 foreach (_ => coins = coins :+ (if (Random.nextBoolean()) Silver() else Gold()))
+            coins
         }
     }
 
@@ -36,18 +41,20 @@ class AdventureAsyncImpl extends AdventureAsync {
 object AsyncMain extends App {
     val adventure: AdventureAsync = new AdventureAsyncImpl()
 
-    val treasure: Treasure = Await.result(findTreasureByAdventure(adventure), 3.seconds) // todo resilient, recovery policy
+    1 to 10 foreach (_ => {
+        val treasure: Treasure = Await.result(findTreasureByAdventure(adventure), 3.seconds) // todo resilient, recovery policy
+        println(treasure)
+    })
 
-    def findTreasureByAdventure(adventure: AdventureAsync): Future[Treasure] = {
+    def findTreasureByAdventure(adventure: AdventureAsync): Future[Treasure] = adventure.collectionCoinsWithFallBack()
+        .flatMap(coins => adventure.buyTreasure(coins).recoverWith(e => findTreasureByAdventure(adventure)))
+
+    def findTreasureByAdventureWithPromise(adventure: AdventureAsync): Future[Treasure] = {
+        val eventualTreasure: Future[Treasure] = adventure.collectionCoinsWithFallBack()
+            .flatMap(coins => adventure.buyTreasure(coins).recoverWith(e => findTreasureByAdventure(adventure)))
+
         val promisedTreasure: Promise[Treasure] = Promise[Treasure]()
-        adventure.collectionCoins().onComplete {
-            case Success(x) => adventure.buyTreasure(x).onComplete {
-                case Success(y) => promisedTreasure.success(y)
-                case Failure(exception) => promisedTreasure.failure(exception)
-            }
-            case Failure(exception) => promisedTreasure.failure(exception)
-        }
-
+        promisedTreasure.completeWith(eventualTreasure)
         promisedTreasure.future
     }
 
