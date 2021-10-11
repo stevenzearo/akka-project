@@ -25,7 +25,7 @@ class AdventureTryImpl extends AdventureTry {
 }
 
 object TryMain extends App {
-    val adventure: AdventureAsync = new AdventureAsyncImpl()
+    val adventure: AdventureTry = new AdventureTryImpl()
     adventure.collectionCoins()
     val treasure: Try[Treasure] = for {
         coins <- adventure.collectionCoins()
