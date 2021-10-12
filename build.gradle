@@ -21,6 +21,7 @@ buildscript {
         classpath 'org.scala-lang:scala-library:2.13.6'
         classpath 'org.scala-lang:scala-reflect:2.13.6'
         classpath 'org.scala-lang:scala-compiler:2.13.6'
+        classpath 'io.reactivex:rxscala_2.13:0.27.0'
     }
 }
 plugins {
@@ -71,6 +72,7 @@ allprojects {
         implementation 'org.scala-lang:scala-library:2.13.6'
         implementation 'org.scala-lang:scala-reflect:2.13.6'
         implementation 'org.scala-lang:scala-compiler:2.13.6'
+        implementation 'io.reactivex:rxscala_2.13:0.27.0'
     }
 
     sourceSets {
