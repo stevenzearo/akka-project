@@ -1,6 +1,6 @@
 package app.receiver
 
-import akka.actor.{Actor, ActorLogging, ActorSelection, Props, Stash}
+import akka.actor.{Actor, ActorLogging, ActorSelection, AllForOneStrategy, Props, Stash, SupervisorStrategy}
 import app.receiver.ConnectionContext.{AvailableMessage, RecoveringMessage}
 import app.receiver.api.{CloseMessage, ConnectionMessage, OpenMessage}
 
@@ -9,6 +9,14 @@ import scala.sys.exit
 
 class ConnectionContext extends Actor with ActorLogging with Stash {
     val connectionMap: mutable.HashMap[String, ActorSelection] = mutable.HashMap.empty // todo these data should store in db
+
+    // todo need handle specific exception or throwable
+    override def supervisorStrategy: SupervisorStrategy = {
+        val decider: SupervisorStrategy.Decider = {
+            case Throwable => SupervisorStrategy.Restart
+        }
+        AllForOneStrategy()(decider orElse super.supervisorStrategy.decider)
+    }
 
     override def receive: Receive = {
         case msg: OpenMessage =>
@@ -58,8 +66,11 @@ class ConnectionContext extends Actor with ActorLogging with Stash {
 }
 
 object ConnectionContext {
+
     final case object AvailableMessage
+
     final case object RecoveringMessage
+
     final case class Message()
 
     def connectionContextProps: Props = Props[ConnectionContext]()
