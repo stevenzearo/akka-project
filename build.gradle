@@ -143,3 +143,23 @@ configure(project(':demo:message-sender-service')) {
         implementation project(":demo:message-receiver-interface")
     }
 }
+
+configure(project(':reactive-design:aircraft')) {
+    dependencies {
+        implementation "com.typesafe.akka:akka-actor_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-actor_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-remote_$SCALA_VERSION:$AKKA_VERSION"
+//        implementation "com.typesafe.akka:akka-stream_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-slf4j_$SCALA_VERSION:$AKKA_VERSION"
+//        implementation "com.typesafe.akka:akka-http_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+//        implementation "com.typesafe.akka:akka-http-core_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+
+        testImplementation "org.junit.jupiter:junit-jupiter:$JUNIT_VERSION"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$JUNIT_VERSION"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$JUNIT_VERSION"
+
+        testImplementation "com.typesafe.akka:akka-testkit_$SCALA_VERSION:$AKKA_VERSION"
+//        testImplementation "com.typesafe.akka:akka-stream-testkit_$SCALA_VERSION:$AKKA_VERSION"
+//        testImplementation "com.typesafe.akka:akka-http-testkit_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+    }
+}
