@@ -7,5 +7,5 @@ final case class Aircraft(
                            speed: Double,
                            heading: Double,
                            passengers: List[Passenger],
-                           weather: List[Weather]
+                           weathers: List[Weather]
                          )
