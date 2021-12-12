@@ -3,4 +3,5 @@ include 'demo:message-sender-interface',
         'demo:message-sender-service',
         'demo:message-receiver-service',
         'demo:message-receiver-interface'
-include 'reactive-design:aircraft'
+include 'reactive-design:aircraft',
+        'reactive-design:transfer'

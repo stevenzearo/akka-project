@@ -1,10 +1,11 @@
 package signal
 
 class SignalSubscriber[T]() extends Subscriber[T] {
-    var t: T = _
-    override def handle(t: T): Unit = {
-        this.t = t
-    }
+  var t: T = _
 
-    def apply(): T = t
+  override def handle(t: T): Unit = {
+    this.t = t
+  }
+
+  def apply(): T = t
 }
