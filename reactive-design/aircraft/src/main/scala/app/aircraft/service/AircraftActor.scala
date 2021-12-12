@@ -1,7 +1,8 @@
-package app.design.aircraft.service
+package app.aircraft.service
 
-import akka.actor.Actor
-import app.design.aircraft.domain.{Aircraft, Passenger, Weather}
+import akka.actor.{Actor, Props}
+import app.aircraft.domain
+import app.aircraft.domain.{Aircraft, Passenger, Weather}
 
 class AircraftActor(id: String,
                     callSign: String,
@@ -11,9 +12,9 @@ class AircraftActor(id: String,
                     passengers: List[Passenger],
                     weathers: List[Weather]) extends Actor {
 
-  import app.design.aircraft.domain.AircraftProtocol._
+  import app.aircraft.domain.AircraftProtocol._
 
-  private var currentState: Aircraft = Aircraft(id, callSign, altitude, speed, heading, passengers, weathers)
+  private var currentState: Aircraft = domain.Aircraft(id, callSign, altitude, speed, heading, passengers, weathers)
 
   override def receive: Receive = {
     case ChangeAltitude(altitude) =>
@@ -32,4 +33,14 @@ class AircraftActor(id: String,
       currentState = currentState.copy(weathers = currentState.weathers :+ weather)
       sender() ! Ok
   }
+}
+
+object AircraftActor {
+  def props(id: String,
+            callSign: String,
+            altitude: Double,
+            speed: Double,
+            heading: Double,
+            passengers: List[Passenger],
+            weathers: List[Weather]): Props = Props(new AircraftActor(id, callSign, altitude, speed, heading, passengers, weathers))
 }

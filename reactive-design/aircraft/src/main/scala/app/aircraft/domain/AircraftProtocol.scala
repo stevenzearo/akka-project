@@ -1,4 +1,4 @@
-package app.design.aircraft.domain
+package app.aircraft.domain
 
 object AircraftProtocol {
 
