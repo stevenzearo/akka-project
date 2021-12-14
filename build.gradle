@@ -35,6 +35,7 @@ version '1.0-SNAPSHOT'
 
 def AKKA_VERSION = '2.6.16'
 def AKKA_HTTP_VERSION = '10.2.6'
+def AKKA_PERSISTENCE_MONGO = '3.0.7'
 def SCALA_VERSION = '2.13'
 def SCALA_TEST_VERSION = '3.2.10'
 def JUNIT_VERSION = '5.7.2'
@@ -115,6 +116,8 @@ configure(subprojects.findAll { it -> it.name.endsWith('service') || it.name.end
     dependencies {
         implementation "com.typesafe.akka:akka-actor_$SCALA_VERSION:$AKKA_VERSION"
         implementation "com.typesafe.akka:akka-actor_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.typesafe.akka:akka-persistence_$SCALA_VERSION:$AKKA_VERSION"
+        implementation "com.github.scullxbones:akka-persistence-mongo-scala_$SCALA_VERSION:$AKKA_PERSISTENCE_MONGO"
         implementation "com.typesafe.akka:akka-remote_$SCALA_VERSION:$AKKA_VERSION"
         implementation "com.typesafe.akka:akka-stream_$SCALA_VERSION:$AKKA_VERSION"
         implementation "com.typesafe.akka:akka-slf4j_$SCALA_VERSION:$AKKA_VERSION"
