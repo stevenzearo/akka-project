@@ -1,7 +1,7 @@
-package app.receiver
+package app.receiver.service
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
-import app.receiver.api.{CloseMessage, ConnectionMessage, OpenMessage}
+import app.receiver.protocol.{CloseMessage, ConnectionMessage, OpenMessage}
 
 class MessageReceiver(val connectionRef: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {

@@ -1,8 +1,8 @@
-package app.receiver
+package app.receiver.service
 
 import akka.actor.{Actor, ActorLogging, ActorSelection, AllForOneStrategy, Props, Stash, SupervisorStrategy}
-import app.receiver.ConnectionContext.{AvailableMessage, RecoveringMessage}
-import app.receiver.api.{CloseMessage, ConnectionMessage, OpenMessage}
+import app.receiver.protocol.{CloseMessage, ConnectionMessage, OpenMessage}
+import app.receiver.service.ConnectionContext.{AvailableMessage, RecoveringMessage}
 
 import scala.collection.mutable
 import scala.sys.exit

@@ -38,6 +38,7 @@ def AKKA_HTTP_VERSION = '10.2.6'
 def AKKA_PERSISTENCE_MONGO = '3.0.7'
 def SCALA_VERSION = '2.13'
 def SCALA_TEST_VERSION = '3.2.10'
+def PLAY_JSON_VERSION = '2.9.2'
 def JUNIT_VERSION = '5.7.2'
 
 allprojects {
@@ -123,6 +124,8 @@ configure(subprojects.findAll { it -> it.name.endsWith('service') || it.name.end
         implementation "com.typesafe.akka:akka-slf4j_$SCALA_VERSION:$AKKA_VERSION"
         implementation "com.typesafe.akka:akka-http_$SCALA_VERSION:$AKKA_HTTP_VERSION"
         implementation "com.typesafe.akka:akka-http-core_$SCALA_VERSION:$AKKA_HTTP_VERSION"
+
+        implementation "com.typesafe.play:play-json_$SCALA_VERSION:$PLAY_JSON_VERSION"
 
         testImplementation "org.junit.jupiter:junit-jupiter:$JUNIT_VERSION"
         testImplementation "org.junit.jupiter:junit-jupiter-api:$JUNIT_VERSION"

@@ -1,6 +1,6 @@
-package app.receiver.api
+package app.receiver.protocol
 
-import app.receiver.api.MessageTypes.MessageType
+import app.receiver.protocol.MessageTypes.MessageType
 
 object MessageTypes extends Enumeration with Serializable {
   type MessageType = Value

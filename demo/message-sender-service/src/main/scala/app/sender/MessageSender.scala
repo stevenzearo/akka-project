@@ -3,7 +3,8 @@ package app.sender
 import akka.actor.{ActorLogging, ActorRef}
 import akka.persistence.{AtLeastOnceDelivery, PersistentActor, RecoveryCompleted}
 import akka.serialization.Serialization
-import app.receiver.api.{CloseMessage, ConnectionMessage}
+import app.receiver.api.ConnectionMessage
+import app.receiver.protocol.{CloseMessage, ConnectionMessage}
 
 import scala.sys.exit
 

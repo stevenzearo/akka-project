@@ -1,4 +1,4 @@
-package app.receiver.api
+package app.receiver.protocol
 
 import akka.serialization.Serializer
 
