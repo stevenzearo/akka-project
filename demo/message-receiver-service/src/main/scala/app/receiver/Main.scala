@@ -6,7 +6,9 @@ import akka.http.scaladsl.Http
 import akka.routing.FromConfig
 import app.receiver.api.MessageConnectionWebServiceImpl
 import app.receiver.service.{ConnectionContext, MessageReceiver}
+import com.typesafe.config.{Config, ConfigFactory}
 
+import java.io.File
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.io.StdIn
 
@@ -24,7 +26,9 @@ private val receiverRef: ActorRef = system.actorOf(RoundRobinGroup(actorPaths).p
 */
 
 object Main extends App {
-  private implicit val system: ActorSystem = ActorSystem("message-receiver") // will automatically load application.conf
+  private val file: File = new File("./demo/message-receiver-service/src/main/resources/application.conf")
+  private val value: Config = ConfigFactory.parseFile(file)
+  private implicit val system: ActorSystem = ActorSystem("message-receiver", value) // will automatically load application.conf
   private implicit val dispatcher: ExecutionContextExecutor = system.dispatcher
   val connectionRef: ActorRef = system.actorOf(ConnectionContext.connectionContextProps, "connection-context")
   private val receiverProps = Props(classOf[MessageReceiver], connectionRef)
