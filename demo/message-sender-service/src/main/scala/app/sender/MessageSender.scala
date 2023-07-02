@@ -1,5 +1,6 @@
 package app.sender
 
+import akka.actor.Actor.Receive
 import akka.actor.{ActorLogging, ActorRef}
 import akka.persistence.{AtLeastOnceDelivery, PersistentActor, RecoveryCompleted}
 import akka.serialization.Serialization
@@ -23,7 +24,7 @@ class MessageSender(server: ActorRef) extends PersistentActor with AtLeastOnceDe
         server ! new CloseMessage(Serialization.serializedActorPath(this.self))
         exit()
       } else {
-        server ! new ConnectionMessage(Serialization.serializedActorPath(this.self), msg.toPath, content)
+        server ! ConnectionMessage(Serialization.serializedActorPath(this.self), msg.toPath, content)
       }
     case _ => log.error("unknown message!")
   }

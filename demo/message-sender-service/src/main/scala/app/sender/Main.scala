@@ -20,6 +20,6 @@ object Main extends App {
   log.info(senderRef.path.toString)
   private val senderPath: String = Serialization.serializedActorPath(senderRef)
   log.info(senderPath)
-  receiverRef ! new OpenMessage(senderPath)
+  receiverRef ! OpenMessage(senderPath)
   senderRef ! new ConnectionMessage(senderPath, senderPath, "hello")
 }

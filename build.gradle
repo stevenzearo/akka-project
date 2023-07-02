@@ -18,9 +18,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.scala-lang:scala-library:2.13.6'
-        classpath 'org.scala-lang:scala-reflect:2.13.6'
-        classpath 'org.scala-lang:scala-compiler:2.13.6'
+        classpath 'org.scala-lang:scala-library:2.13.11'
+        classpath 'org.scala-lang:scala-reflect:2.13.11'
+        classpath 'org.scala-lang:scala-compiler:2.13.11'
         classpath 'io.reactivex:rxscala_2.13:0.27.0'
     }
 }
@@ -33,13 +33,13 @@ plugins {
 group 'steve.akka.project'
 version '1.0-SNAPSHOT'
 
-def AKKA_VERSION = '2.6.16'
-def AKKA_HTTP_VERSION = '10.2.6'
-def AKKA_PERSISTENCE_MONGO = '3.0.7'
+def AKKA_VERSION = '2.8.3'
+def AKKA_HTTP_VERSION = '10.5.2'
+def AKKA_PERSISTENCE_MONGO = '3.0.8'
 def SCALA_VERSION = '2.13'
-def SCALA_TEST_VERSION = '3.2.10'
-def PLAY_JSON_VERSION = '2.9.2'
-def JUNIT_VERSION = '5.7.2'
+def SCALA_TEST_VERSION = '3.2.16'
+def PLAY_JSON_VERSION = '2.9.4'
+def JUNIT_VERSION = '5.9.3'
 
 allprojects {
     apply plugin: 'java'
@@ -64,17 +64,17 @@ allprojects {
         }
     }
 
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
     test {
         useJUnitPlatform()
     }
 
     dependencies {
-        implementation 'org.scala-lang:scala-library:2.13.6'
-        implementation 'org.scala-lang:scala-reflect:2.13.6'
-        implementation 'org.scala-lang:scala-compiler:2.13.6'
+        implementation 'org.scala-lang:scala-library:2.13.11'
+        implementation 'org.scala-lang:scala-reflect:2.13.11'
+        implementation 'org.scala-lang:scala-compiler:2.13.11'
         implementation 'io.reactivex:rxscala_2.13:0.27.0'
     }
 

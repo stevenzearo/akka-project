@@ -8,47 +8,8 @@ object MessageTypes extends Enumeration with Serializable {
   val OPEN = Value("OPEN")
   val CLOSED = Value("CLOSED")
 }
+class Message(fromPath: String, messageType: MessageType) extends Serializable
+case class OpenMessage(fromPath: String, messageType: MessageType = MessageTypes.OPEN) extends Message(fromPath, messageType)
+case class CloseMessage(fromPath: String, messageType: MessageType = MessageTypes.CLOSED) extends Message(fromPath, messageType)
 
-case class OpenMessage() extends Serializable {
-  val messageType: MessageType = MessageTypes.OPEN
-  var fromPath: String = _
-
-  def this(fromPath: String) = {
-    this()
-    this.fromPath = fromPath
-  }
-
-  def apply(fromPath: String): OpenMessage = new OpenMessage(fromPath)
-}
-
-case class CloseMessage() extends Serializable {
-  val messageType: MessageType = MessageTypes.CLOSED
-  var fromPath: String = _
-
-  def this(fromPath: String) = {
-    this()
-    this.fromPath = fromPath
-  }
-
-  def apply(fromPath: String): CloseMessage = new CloseMessage(fromPath)
-}
-
-case class ConnectionMessage() extends Serializable {
-  val messageType: MessageType = MessageTypes.CONNECTED
-  var fromPath: String = _
-  var toPath: String = _
-  var content: Any = _
-
-  def this(fromPath: String) = {
-    this()
-    this.fromPath = fromPath
-  }
-
-  def this(fromPath: String, toPath: String, content: Any) = {
-    this(fromPath)
-    this.toPath = toPath
-    this.content = content
-  }
-
-  def apply(fromPath: String, toPath: String, content: Any): ConnectionMessage = new ConnectionMessage(fromPath, toPath, content)
-}
+case class ConnectionMessage(fromPath: String, toPath: String, content: Any, messageType: MessageType = MessageTypes.CLOSED) extends Message(fromPath, messageType)
