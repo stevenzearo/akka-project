@@ -1,7 +1,7 @@
 package app.receiver.service
 
 import akka.actor.{Actor, ActorLogging, ActorSelection, AllForOneStrategy, Props, Stash, SupervisorStrategy}
-import app.receiver.protocol.{CloseMessage, ConnectionMessage, OpenMessage}
+import app.protocol.message.{CloseMessage, ConnectionMessage, OpenMessage}
 import app.receiver.service.ConnectionContext.{AvailableMessage, RecoveringMessage}
 
 import scala.collection.mutable
@@ -44,7 +44,7 @@ class ConnectionContext extends Actor with ActorLogging with Stash {
 
   def send(fromPath: String, toPath: String, content: Any): Unit = {
     val maybeRef = connectionMap.get(toPath)
-    if (maybeRef.isDefined) maybeRef.get ! new ConnectionMessage(fromPath, toPath, content)
+    if (maybeRef.isDefined) maybeRef.get ! ConnectionMessage(fromPath, toPath, content)
   }
 
   def handle: Receive = {
@@ -70,8 +70,6 @@ object ConnectionContext {
   final case object AvailableMessage
 
   final case object RecoveringMessage
-
-  final case class Message()
 
   def connectionContextProps: Props = Props[ConnectionContext]()
 }

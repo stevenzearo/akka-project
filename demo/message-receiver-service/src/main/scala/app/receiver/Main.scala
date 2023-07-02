@@ -33,7 +33,6 @@ object Main extends App {
   val connectionRef: ActorRef = system.actorOf(ConnectionContext.connectionContextProps, "connection-context")
   private val receiverProps = Props(classOf[MessageReceiver], connectionRef)
   private val routerProps: Props = FromConfig.props(receiverProps)
-
   private val receiverRef: ActorRef = system.actorOf(routerProps, "receiver")
   private val log: LoggingAdapter = system.log
   log.info(receiverRef.path.toSerializationFormat)
