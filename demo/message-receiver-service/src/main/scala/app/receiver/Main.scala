@@ -38,8 +38,8 @@ object Main extends App {
   private val log: LoggingAdapter = system.log
   log.info(receiverRef.path.toSerializationFormat)
   private val messageConnectionWebService = new MessageConnectionWebServiceImpl()
-  private val bindingFuture: Future[Http.ServerBinding] = Http().newServerAt("localhost", 8080).bind(messageConnectionWebService.routes)
-  println(s"Server now online. Please navigate to http://localhost:8080/connect\nPress RETURN to stop...")
+  private val bindingFuture: Future[Http.ServerBinding] = Http().newServerAt("localhost", 6060).bind(messageConnectionWebService.routes)
+  println(s"Server now online. Please navigate to http://localhost:6060/connection\nPress RETURN to stop...")
   StdIn.readLine()
   bindingFuture
     .flatMap(_.unbind())
