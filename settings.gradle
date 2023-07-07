@@ -1,4 +1,5 @@
-include 'demo:actor-demo'
+include 'demo:actor-demo',
+        'demo:actor-persistent-demo'
 include 'demo:message-sender-interface',
         'demo:message-protocol-interface',
         'demo:message-sender-service',
